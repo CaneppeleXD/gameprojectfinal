@@ -5,7 +5,6 @@ The Game Project 4
 
 */
 
-
 var gameChar_x;
 var gameChar_y;
 var floorPos_y;
@@ -24,21 +23,23 @@ var cameraPosX;
 var game_score;
 var flagpole;
 var lives;
-
+var s;
+var trees;
 function setup()
 {
 	createCanvas(1024, 576);
 	floorPos_y = height * 3/4;
     lives=3;
     startGame();
+
+    s = new Square(width/2,height/2,200);
 }
 
 function draw()
 {
-
 	///////////DRAWING CODE//////////
     cameraPosX=gameChar_x - width/2;
-    
+    s.draw();   
 	background(100,155,255); //fill the sky blue
     
     textSize(12);
@@ -65,26 +66,14 @@ function draw()
     drawTrees();
     
 	//collectable
-    for (i = 0; i<collectables.length;i++){
-        if(!collectables[i].isFound){
-            drawCollectable(collectables[i]);   
-            checkCollectable(collectables[i]);   
-        }
-    }
+    drawCollectables();
     
     //draw the canyon
-    for (i = 0; i<canyons.length;i++){
-        drawCanyon(canyons[i]);
-        if(gameChar_x<canyons[i].x_pos+canyons[i].width && gameChar_x>canyons[i].x_pos && !isFalling){
-        isPlummeting=true;
-        isLeft=false;
-        isRight=false;
-        }
-    }
+    drawCanyons();
     
     //draw flagpole
-    renderFlagPole();
-    checkFlagpoleIsReached();
+    flagpole.draw();
+    flagpole.checkFlagpoleIsReached();
 
 	checkPlayerDie();
     
@@ -262,83 +251,39 @@ function keyReleased()
 
 function drawClouds(){
     for(var i = 0;i < clouds.length; i++){
-        fill(250,250,250);
-        ellipse(clouds[i].x_pos, clouds[i].y_pos, 80*(clouds[i].size/100), 80*(clouds[i].size/100));
-        ellipse(clouds[i].x_pos-40*(clouds[i].size/100), clouds[i].y_pos, 60*(clouds[i].size/100), 60*(clouds[i].size/100));
-        ellipse(clouds[i].x_pos+40*(clouds[i].size/100), clouds[i].y_pos, 60*(clouds[i].size/100), 60*(clouds[i].size/100));
+        clouds[i].draw();
     }
 }
 
 function drawMountains(){
     for(var i = 0;i < mountains.length; i++){
-        fill(133, 146, 158);
-        triangle(mountains[i].x_pos,mountains[i].y_pos,mountains[i].x_pos+100*mountains[i].size/100,mountains[i].y_pos,mountains[i].x_pos+50*mountains[i].size/100,mountains[i].y_pos-132*mountains[i].size/100);
+        mountains[i].draw();
     }
 }
 
 function drawTrees(){
-    for(var i = 0;i < trees_x.length; i++){
-        fill(147,81,22);
-        rect(trees_x[i],treePos_y,60,200);
-        fill(0,120,0);
-        triangle(trees_x[i]-55,treePos_y+68,trees_x[i]+115,treePos_y+68,trees_x[i]+30,treePos_y-50);
-        fill(0,120,0);
-        triangle(trees_x[i]-45,treePos_y-2,trees_x[i]+105,treePos_y-2,trees_x[i]+30,treePos_y-100);
+    for(var i = 0;i < trees.length; i++){
+        trees[i].draw();
     }
 }
 
-function drawCollectable(t_collectable){
-    if (t_collectable.isFound==false){
-        fill(255, 166, 10);
-        ellipse(t_collectable.x_pos,t_collectable.y_pos,25*(t_collectable.size/100),25*(t_collectable.size/100));
-        fill(0,100,0);
-        triangle(t_collectable.x_pos+5,t_collectable.y_pos,t_collectable.x_pos,t_collectable.y_pos-20,t_collectable.x_pos+20,t_collectable.y_pos-15);   
+function drawCollectables(){
+    for (i = 0; i<collectables.length;i++){
+        if(!collectables[i].isFound){
+            collectables[i].draw();   
+            collectables[i].checkCollectable(gameChar_x, gameChar_y);   
+        }
     }
 }
 
-function drawCanyon(t_canyon){
-    fill(120, 66, 18);
-    rect(t_canyon.x_pos,floorPos_y,t_canyon.width,height);
-}
-
-function checkCollectable(t_collectable){
-    if (dist(gameChar_x,gameChar_y,collectables[i].x_pos,collectables[i].y_pos)<50){
-            collectables[i].isFound=true;
-            game_score++;
-    }
-}
-
-function  renderFlagPole(){
-    strokeWeight(5);
-    stroke(100);
-    line(flagpole.x_pos,floorPos_y,flagpole.x_pos,floorPos_y-250);
-    noStroke();
-    fill(0);
-    if (flagpole.isReached){
-        rect(flagpole.x_pos,floorPos_y-250,80,50);    
-        fill(0,150,0);
-        rect(flagpole.x_pos,floorPos_y-250,80,50);
-        fill(255,255,0);
-        triangle(flagpole.x_pos,floorPos_y-225,flagpole.x_pos+40,floorPos_y-250,flagpole.x_pos+40,floorPos_y-200);
-        triangle(flagpole.x_pos+80,floorPos_y-225,flagpole.x_pos+40,floorPos_y-250,flagpole.x_pos+40,floorPos_y-200);
-        fill(0,0,255);
-        circle(flagpole.x_pos+40,floorPos_y-225,22);
-    }
-    else{
-        fill(0,180,0);
-        rect(flagpole.x_pos,floorPos_y-50,80,50);
-        fill(255,255,0);
-        triangle(flagpole.x_pos,floorPos_y-25,flagpole.x_pos+40,floorPos_y-50,flagpole.x_pos+40,floorPos_y);
-        triangle(flagpole.x_pos+80,floorPos_y-25,flagpole.x_pos+40,floorPos_y-50,flagpole.x_pos+40,floorPos_y);
-        fill(0,0,255);
-        circle(flagpole.x_pos+40,floorPos_y-25,22);
-    }
-    
-}
-
-function checkFlagpoleIsReached(){
-    if(abs(gameChar_x-flagpole.x_pos)<10){
-        flagpole.isReached=true;
+function drawCanyons(){
+    for (i = 0; i<canyons.length;i++){
+        canyons[i].draw(floorPos_y);
+        if(canyons[i].checkCanyon()){
+        isPlummeting=true;
+        isLeft=false;
+        isRight=false;
+        }
     }
 }
 
@@ -358,6 +303,26 @@ function drawLifeTokens(){
     }
 }
 
+function createCollectables(){
+    return [new Collectable(90,410,100),new Collectable(700,410,100),new Collectable(1100,410,100)]
+}
+
+function createCanyons(){
+    return [new Canyon(100,100),new Canyon(560,100),new Canyon(960,100)];
+}
+
+function createTrees(){
+    return [new Tree(30,floorPos_y-200),new Tree(500,floorPos_y-200),new Tree(900,floorPos_y-200),new Tree(1300,floorPos_y-200)]
+}
+
+function createClouds(){
+    return [new Cloud(200,120,120),new Cloud(600,80,150),new Cloud(1000,150,100)];
+}
+
+function createMountains(){
+   return [new Mountain(210,floorPos_y,220),new Mountain(510,floorPos_y,220),new Mountain(810,floorPos_y,220)]; 
+}
+
 function startGame(){
     gameChar_x = width/2;
 	gameChar_y = floorPos_y;
@@ -365,81 +330,20 @@ function startGame(){
     isRight = false;
     isFalling = false;
     isPlummeting = false;
-    collectables= [
-        {
-        x_pos: 90, 
-        y_pos: 410, 
-        size: 100,
-        isFound: false
-        },
-        {
-        x_pos: 700, 
-        y_pos: 410, 
-        size: 100,
-        isFound: false
-        },
-        {
-        x_pos: 1100, 
-        y_pos: 410, 
-        size: 100,
-        isFound: false
-        }
-    ];
+
+    collectables= createCollectables();
     
-    canyons= [
-        {
-        x_pos: 100, 
-        width: 100
-        },
-        {
-        x_pos: 560, 
-        width: 100
-        },
-        {
-        x_pos: 960, 
-        width: 100
-        },
-    ];
-    trees_x=[30,500,900,1300];
-    treePos_y=floorPos_y-200;
-    clouds=[
-        {
-            x_pos: 200, 
-            y_pos: 120, 
-            size: 120    
-        },
-        {
-            x_pos: 600, 
-            y_pos: 80, 
-            size: 150    
-        },
-        {
-            x_pos: 1000, 
-            y_pos: 150, 
-            size: 100    
-        }
-    ];
-    mountains= [
-        {
-            x_pos: 210, 
-            y_pos: floorPos_y, 
-            size: 220
-        },
-        {
-            x_pos: 510, 
-            y_pos: floorPos_y, 
-            size: 220
-        },
-        {
-            x_pos: 810, 
-            y_pos: floorPos_y, 
-            size: 220
-        }
-    ];
+    canyons= createCanyons();
+    
+    trees = createTrees();
+
+    clouds=createClouds();
+
+    mountains= createMountains();
+
+    flagpole= new Flagpole(1500);
+
     cameraPosX=0;
     game_score=0;
-    flagpole={
-        isReached:false,
-        x_pos:1500
-    }
 }
+
