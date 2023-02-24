@@ -1,0 +1,96 @@
+function GameChar(x,y){
+    //Possible Char States
+    this.STANDING=0;
+    this.LEFT=1;
+    this.RIGHT=2;
+    this.FALLING=3;
+    this.PLUMMETING=4;
+    //--------------------
+
+    this.pos_x=x;
+    this.pos_y=y;
+    this.lives=3;
+    this.state=this.STANDING;
+    
+    this.draw=function(){
+        if(this.state==this.LEFT) this.drawLeft();
+        else if(this.state==this.RIGHT) this.drawRight();
+        else if(this.state==this.LEFT && this.state==this.FALLING) this.drawJumpLeft();
+        else if(this.state==this.RIGHT && this.state==this.FALLING) this.drawJumpRight(); 
+        else if(this.state==this.FALLING || this.state==this.PLUMMETING) this.drawFalling();
+        else this.drawStanding();
+    }
+
+    this.drawLeft=function(){
+        fill(46, 204, 113);
+        rect(this.pos_x-5,this.pos_y-44,10,38);
+        fill(250, 219, 216 );
+        rect(this.pos_x-7, this.pos_y-66, 14, 25);
+        fill(255,0,0);
+        triangle(this.pos_x-12,this.pos_y-65,this.pos_x+12,this.pos_y-65,this.pos_x,this.pos_y-75);
+        fill(0);
+        rect(this.pos_x-11,this.pos_y-8,16,10);
+    }
+    this.drawRight=function(){
+        fill(46, 204, 113);
+        rect(this.pos_x-5,this.pos_y-44,10,38);
+        fill(250, 219, 216 );
+        rect(this.pos_x-7, this.pos_y-66, 14, 25);
+        fill(255,0,0);
+        triangle(this.pos_x-12,this.pos_y-65,this.pos_x+12,this.pos_y-65,this.pos_x,this.pos_y-75);
+        fill(0);
+        rect(this.pos_x-5,this.pos_y-8,16,10);
+    }
+    this.drawFalling=function(){
+        fill(46, 204, 113);
+        rect(this.pos_x-13,this.pos_y-44,26,25);
+        fill(250, 219, 216 );
+        ellipse(this.pos_x, this.pos_y-55, 25, 25);
+        fill(0);
+        ellipse(this.pos_x-5, this.pos_y-56, 4,4);
+        fill(0);
+        ellipse(this.pos_x+5, this.pos_y-56, 4,4);
+        fill(255,0,0);
+        triangle(this.pos_x-12,this.pos_y-65,this.pos_x+12,this.pos_y-65,this.pos_x,this.pos_y-75);
+        fill(0);
+        rect(this.pos_x-14,this.pos_y-20,10,12);
+        fill(0);
+        rect(this.pos_x+4,this.pos_y-20,10,12);
+    }
+    this.drawJumpLeft=function(){
+        fill(46, 204, 113);
+        rect(this.pos_x-5,this.pos_y-44,10,25);
+        fill(250, 219, 216 );
+        rect(this.pos_x-7, this.pos_y-66, 14, 25);
+        fill(255,0,0);
+        triangle(this.pos_x-12,this.pos_y-65,this.pos_x+12,this.pos_y-65,this.pos_x,this.pos_y-75);
+        fill(0);
+        rect(this.pos_x-11,this.pos_y-20,16,8);
+    }
+    this.drawJumpRight=function(){
+        fill(46, 204, 113);
+        rect(this.pos_x-5,this.pos_y-44,10,25);
+        fill(250, 219, 216 );
+        rect(this.pos_x-7, this.pos_y-66, 14, 25);
+        fill(255,0,0);
+        triangle(this.pos_x-12,this.pos_y-65,this.pos_x+12,this.pos_y-65,this.pos_x,this.pos_y-75);
+        fill(0);
+        rect(this.pos_x-5,this.pos_y-20,16,8);
+    }
+    this.drawStanding=function(){
+        fill(46, 204, 113);
+        rect(this.pos_x-13,this.pos_y-44,26,38);
+        fill(250, 219, 216 );
+        ellipse(this.pos_x, this.pos_y-55, 25, 25);
+        fill(0);
+        ellipse(this.pos_x-5, this.pos_y-56, 4,4);
+        fill(0);
+        ellipse(this.pos_x+5, this.pos_y-56, 4,4);
+        fill(255,0,0);
+        triangle(this.pos_x-12,this.pos_y-65,this.pos_x+12,this.pos_y-65,this.pos_x,this.pos_y-75);
+        fill(0);
+        rect(this.pos_x-16,this.pos_y-8,12,10);
+        fill(0);
+        rect(this.pos_x+4,this.pos_y-8,12,10);
+    }
+}
