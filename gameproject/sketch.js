@@ -96,6 +96,31 @@ function draw()
     if(!flagpole.isReached) gameChar.update();
 }
 
+function startGame(){
+    gameChar = new GameChar(width/2,floorPos_y,gameChar==null ? 3 : gameChar.lives);
+    
+    gameChar_x = width/2;
+	gameChar_y = floorPos_y;
+    isLeft = false;
+    isRight = false;
+    isFalling = false;
+    isPlummeting = false;
+
+    collectables= createCollectables();
+    
+    canyons= createCanyons();
+    
+    trees = createTrees();
+
+    clouds=createClouds();
+
+    mountains= createMountains();
+
+    flagpole= new Flagpole(1500);
+
+    cameraPosX=0;
+    game_score=0;
+}
 
 function keyPressed()
 {
@@ -188,31 +213,5 @@ function createClouds(){
 
 function createMountains(){
    return [new Mountain(210,floorPos_y,220),new Mountain(510,floorPos_y,220),new Mountain(810,floorPos_y,220)]; 
-}
-
-function startGame(){
-    gameChar = new GameChar(width/2,floorPos_y,gameChar==null ? 3 : gameChar.lives);
-    
-    gameChar_x = width/2;
-	gameChar_y = floorPos_y;
-    isLeft = false;
-    isRight = false;
-    isFalling = false;
-    isPlummeting = false;
-
-    collectables= createCollectables();
-    
-    canyons= createCanyons();
-    
-    trees = createTrees();
-
-    clouds=createClouds();
-
-    mountains= createMountains();
-
-    flagpole= new Flagpole(1500);
-
-    cameraPosX=0;
-    game_score=0;
 }
 
