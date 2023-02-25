@@ -25,28 +25,26 @@ var flagpole;
 var lives;
 var s;
 var trees;
+var gameChar;
 function setup()
 {
 	createCanvas(1024, 576);
 	floorPos_y = height * 3/4;
     lives=3;
     startGame();
-
-    s = new Square(width/2,height/2,200);
 }
 
 function draw()
 {
 	///////////DRAWING CODE//////////
-    cameraPosX=gameChar_x - width/2;
-    s.draw();   
+    cameraPosX=gameChar.pos_x - width/2;
 	background(100,155,255); //fill the sky blue
     
     textSize(12);
     noStroke();
     fill(255);
     text("SCORE:"+game_score,50,20);
-    text("LIVES:"+lives,50,40);  
+    text("LIVES:"+gameChar.lives,50,40);  
     drawLifeTokens();
 	noStroke();
 	fill(0,155,0);
@@ -73,106 +71,16 @@ function draw()
     
     //draw flagpole
     flagpole.draw();
-    flagpole.checkFlagpoleIsReached();
+    flagpole.checkFlagpoleIsReached(gameChar.pos_x);
 
 	checkPlayerDie();
     
     //the game character
+    gameChar.draw();
     
-    if(isLeft && isFalling)
-	{
-		// add your jumping-left codew
-        fill(46, 204, 113);
-        rect(gameChar_x-5,gameChar_y-44,10,25);
-        fill(250, 219, 216 );
-        rect(gameChar_x-7, gameChar_y-66, 14, 25);
-        fill(255,0,0);
-        triangle(gameChar_x-12,gameChar_y-65,gameChar_x+12,gameChar_y-65,gameChar_x,gameChar_y-75);
-        fill(0);
-        rect(gameChar_x-11,gameChar_y-20,16,8);
+    pop();
 
-	}
-	else if(isRight && isFalling)
-	{
-		// add your jumping-right code
-        fill(46, 204, 113);
-        rect(gameChar_x-5,gameChar_y-44,10,25);
-        fill(250, 219, 216 );
-        rect(gameChar_x-7, gameChar_y-66, 14, 25);
-        fill(255,0,0);
-        triangle(gameChar_x-12,gameChar_y-65,gameChar_x+12,gameChar_y-65,gameChar_x,gameChar_y-75);
-        fill(0);
-        rect(gameChar_x-5,gameChar_y-20,16,8);
-
-	}
-	else if(isLeft)
-	{
-		// add your walking left code
-        fill(46, 204, 113);
-        rect(gameChar_x-5,gameChar_y-44,10,38);
-        fill(250, 219, 216 );
-        rect(gameChar_x-7, gameChar_y-66, 14, 25);
-        fill(255,0,0);
-        triangle(gameChar_x-12,gameChar_y-65,gameChar_x+12,gameChar_y-65,gameChar_x,gameChar_y-75);
-        fill(0);
-        rect(gameChar_x-11,gameChar_y-8,16,10);
-
-	}
-	else if(isRight)
-	{
-		// add your walking right code
-        fill(46, 204, 113);
-        rect(gameChar_x-5,gameChar_y-44,10,38);
-        fill(250, 219, 216 );
-        rect(gameChar_x-7, gameChar_y-66, 14, 25);
-        fill(255,0,0);
-        triangle(gameChar_x-12,gameChar_y-65,gameChar_x+12,gameChar_y-65,gameChar_x,gameChar_y-75);
-        fill(0);
-        rect(gameChar_x-5,gameChar_y-8,16,10);
-
-	}
-	else if(isFalling || isPlummeting)
-	{
-		// add your jumping facing forwards code
-        fill(46, 204, 113);
-        rect(gameChar_x-13,gameChar_y-44,26,25);
-        fill(250, 219, 216 );
-        ellipse(gameChar_x, gameChar_y-55, 25, 25);
-        fill(0);
-        ellipse(gameChar_x-5, gameChar_y-56, 4,4);
-        fill(0);
-        ellipse(gameChar_x+5, gameChar_y-56, 4,4);
-        fill(255,0,0);
-        triangle(gameChar_x-12,gameChar_y-65,gameChar_x+12,gameChar_y-65,gameChar_x,gameChar_y-75);
-        fill(0);
-        rect(gameChar_x-14,gameChar_y-20,10,12);
-        fill(0);
-        rect(gameChar_x+4,gameChar_y-20,10,12);
-
-	}
-	else
-	{
-		// add your standing front facing code
-        fill(46, 204, 113);
-        rect(gameChar_x-13,gameChar_y-44,26,38);
-        fill(250, 219, 216 );
-        ellipse(gameChar_x, gameChar_y-55, 25, 25);
-        fill(0);
-        ellipse(gameChar_x-5, gameChar_y-56, 4,4);
-        fill(0);
-        ellipse(gameChar_x+5, gameChar_y-56, 4,4);
-        fill(255,0,0);
-        triangle(gameChar_x-12,gameChar_y-65,gameChar_x+12,gameChar_y-65,gameChar_x,gameChar_y-75);
-        fill(0);
-        rect(gameChar_x-16,gameChar_y-8,12,10);
-        fill(0);
-        rect(gameChar_x+4,gameChar_y-8,12,10);
-
-	}
-    
-     pop();
-
-    if(lives==0){
+    if(gameChar.lives==0){
         fill(255,0,0);
         textSize(50);
         text("Game over. Press space to continue",width/2-400,height/2);  
@@ -181,31 +89,11 @@ function draw()
     if(flagpole.isReached){
         fill(0,255,0);
         textSize(50);
-        text("Level complete. Press space to continue",width/2-450,height/2);  
+        text("Level complete. Press space to continue",width/2-450,height/2);
         return;
     }
-    
-    
-	///////////INTERACTION CODE//////////
-	//Put conditional statements to move the game character below here
-    if (isLeft){
-        gameChar_x-=5
-    }
-    else if (isRight){
-        gameChar_x+=5
-    }
-    
-    if (gameChar_y<floorPos_y){
-        gameChar_y+=4;
-        isFalling=true;
-    }
-    else{
-        isFalling=false;
-    }
-    
-    if (isPlummeting){
-        gameChar_y+=10;
-    }
+
+    if(!flagpole.isReached) gameChar.update();
 }
 
 
@@ -213,22 +101,10 @@ function keyPressed()
 {
 	console.log("keyPressed: " + key);
 	console.log("keyPressed: " + keyCode);
-    if (!(isPlummeting||flagpole.isReached||lives==0)){
-        if (keyCode == 39){
-            isRight=true;
-            console.log(isRight);
-        }
-        if (keyCode == 37){
-            isLeft=true;
-            console.log(isLeft);
-        }
-        if (keyCode == 87 && !isFalling){
-            gameChar_y-=100;
-        }
-    }
-    if(keyCode==32 && (flagpole.isReached||lives==0)){
-        lives=3;
+    if(!flagpole.isReached) gameChar.keyPressed(keyCode);
+    if(keyCode==32 && (flagpole.isReached||gameChar.lives==0)){
         startGame();
+        gameChar.lives=3;
     }
 }
 
@@ -239,14 +115,7 @@ function keyReleased()
 
 	console.log("keyReleased: " + key);
 	console.log("keyReleased: " + keyCode);
-    if (keyCode == 39){
-        isRight=false;
-        console.log(isRight);
-    }
-    if (keyCode == 37){
-        isLeft=false;
-        console.log(isLeft);
-    }
+    if(!flagpole.isReached) gameChar.keyReleased(keyCode);
 }
 
 function drawClouds(){
@@ -271,7 +140,7 @@ function drawCollectables(){
     for (i = 0; i<collectables.length;i++){
         if(!collectables[i].isFound){
             collectables[i].draw();   
-            collectables[i].checkCollectable(gameChar_x, gameChar_y);   
+            collectables[i].checkCollectable(gameChar.pos_x, gameChar.pos_y);   
         }
     }
 }
@@ -279,18 +148,16 @@ function drawCollectables(){
 function drawCanyons(){
     for (i = 0; i<canyons.length;i++){
         canyons[i].draw(floorPos_y);
-        if(canyons[i].checkCanyon()){
-        isPlummeting=true;
-        isLeft=false;
-        isRight=false;
+        if(canyons[i].checkCanyon(gameChar.pos_x)){
+            gameChar.canyonFall();
         }
     }
 }
 
 function checkPlayerDie(){
-    if(gameChar_y>=height && lives>0){
-        lives--;
-        if(lives>0){
+    if(gameChar.pos_y>=height && gameChar.lives>0){
+        gameChar.lives--;
+        if(gameChar.lives>0){
             startGame();
         }
     }
@@ -324,6 +191,8 @@ function createMountains(){
 }
 
 function startGame(){
+    gameChar = new GameChar(width/2,floorPos_y,gameChar==null ? 3 : gameChar.lives);
+    
     gameChar_x = width/2;
 	gameChar_y = floorPos_y;
     isLeft = false;

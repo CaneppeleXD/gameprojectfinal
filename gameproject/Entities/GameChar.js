@@ -1,4 +1,4 @@
-function GameChar(x,y){
+function GameChar(x,y,lives){
     //Possible Char States
     this.STANDING=0;
     this.LEFT=1;
@@ -6,18 +6,18 @@ function GameChar(x,y){
     this.FALLING=3;
     this.PLUMMETING=4;
     //--------------------
-
     this.pos_x=x;
     this.pos_y=y;
-    this.lives=3;
-    this.state=this.STANDING;
+    this.lives=lives;
+    this.floorPos=y;
+    this.state=[true,false,false,false];
     
     this.draw=function(){
-        if(this.state==this.LEFT) this.drawLeft();
-        else if(this.state==this.RIGHT) this.drawRight();
-        else if(this.state==this.LEFT && this.state==this.FALLING) this.drawJumpLeft();
-        else if(this.state==this.RIGHT && this.state==this.FALLING) this.drawJumpRight(); 
-        else if(this.state==this.FALLING || this.state==this.PLUMMETING) this.drawFalling();
+        if(this.state[this.LEFT]) this.drawLeft();
+        else if(this.state[this.RIGHT]) this.drawRight();
+        else if(this.state[this.LEFT] && this.state[this.FALLING]) this.drawJumpLeft();
+        else if(this.state[this.RIGHT] && this.state[this.FALLING]) this.drawJumpRight(); 
+        else if(this.state[this.FALLING] || this.state[this.PLUMMETING]) this.drawFalling();
         else this.drawStanding();
     }
 
@@ -92,5 +92,51 @@ function GameChar(x,y){
         rect(this.pos_x-16,this.pos_y-8,12,10);
         fill(0);
         rect(this.pos_x+4,this.pos_y-8,12,10);
+    }
+
+    this.update=function(){
+        if(this.state[this.LEFT]) this.pos_x-=5;
+        else if(this.state[this.RIGHT]) this.pos_x+=5;
+        
+        if(this.pos_y<this.floorPos) {
+            this.pos_y+=4;
+            this.state[this.FALLING]=true;
+        }
+        else this.state[this.FALLING]=false;
+        
+        if(this.state[this.PLUMMETING]) {
+            this.pos_y+=10;
+        }
+    }
+
+    this.keyPressed=function(keyCode){
+        if (!(this.state[this.PLUMMETING]||this.lives==0)){
+            if (keyCode == 39){
+                this.state[this.RIGHT]=true;
+            }
+            if (keyCode == 37){
+                this.state[this.LEFT]=true;
+            }
+            if (keyCode == 87 && !this.state[this.FALLING]){
+                this.pos_y-=100;
+            }
+        }
+    }
+
+    this.keyReleased=function(keyCode){
+        if (keyCode == 39){
+            this.state[this.RIGHT]=false;
+        }
+        if (keyCode == 37){
+            this.state[this.LEFT]=false;
+        }
+    }
+
+    this.canyonFall=function(){
+        if(!this.state[this.FALLING]){
+            this.state[this.PLUMMETING]=true;
+            this.state[this.LEFT]=false;
+            this.state[this.RIGHT]=false;
+        }
     }
 }

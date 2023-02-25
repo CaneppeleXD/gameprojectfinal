@@ -29,7 +29,7 @@ function Flagpole(x){
         }
     }
 
-    this.checkFlagpoleIsReached=function(gameChar_x,gameChar_y){
+    this.checkFlagpoleIsReached=function(gameChar_x){
         if(abs(gameChar_x-flagpole.x_pos)<10){
             flagpole.isReached=true;
         }
