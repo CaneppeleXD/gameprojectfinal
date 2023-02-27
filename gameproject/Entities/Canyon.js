@@ -8,6 +8,6 @@ function Canyon(x, width) {
     }
 
     this.checkCanyon=function(gameChar_x){
-        return(gameChar_x<this.x_pos+this.width && gameChar_x>this.x_pos && !isFalling);
+        return(gameChar_x<this.x_pos+this.width && gameChar_x>this.x_pos);
     }
 }

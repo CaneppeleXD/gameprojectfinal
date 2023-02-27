@@ -1,4 +1,4 @@
-function GameChar(x,y,lives){
+function GameChar(x,y,lives,speed){
     //Possible Char States
     this.STANDING=0;
     this.LEFT=1;
@@ -10,6 +10,7 @@ function GameChar(x,y,lives){
     this.pos_y=y;
     this.lives=lives;
     this.floorPos=y;
+    this.speed=speed;
     this.state=[true,false,false,false];
     
     this.draw=function(){
@@ -95,11 +96,11 @@ function GameChar(x,y,lives){
     }
 
     this.update=function(){
-        if(this.state[this.LEFT]) this.pos_x-=5;
-        else if(this.state[this.RIGHT]) this.pos_x+=5;
+        if(this.state[this.LEFT]) this.pos_x-=this.speed;
+        else if(this.state[this.RIGHT]) this.pos_x+=this.speed;
         
         if(this.pos_y<this.floorPos) {
-            this.pos_y+=4;
+            this.pos_y+=this.speed*0.8;
             this.state[this.FALLING]=true;
         }
         else this.state[this.FALLING]=false;
@@ -117,8 +118,9 @@ function GameChar(x,y,lives){
             if (keyCode == 37){
                 this.state[this.LEFT]=true;
             }
-            if (keyCode == 87 && !this.state[this.FALLING]){
-                this.pos_y-=100;
+            if (keyCode == 87 && !this.state[this.FALLING] && !this.state[this.PLUMMETING]){
+                this.pos_y-=120;
+                this.state[this.FALLING]=true;
             }
         }
     }

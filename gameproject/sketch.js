@@ -97,7 +97,7 @@ function draw()
 }
 
 function startGame(){
-    gameChar = new GameChar(width/2,floorPos_y,gameChar==null ? 3 : gameChar.lives);
+    gameChar = new GameChar(width/2,floorPos_y,gameChar==null ? 3 : gameChar.lives, 5);
     
     gameChar_x = width/2;
 	gameChar_y = floorPos_y;
@@ -189,7 +189,7 @@ function checkPlayerDie(){
 }
 
 function drawLifeTokens(){
-    for(var i=0;i<lives;i++){
+    for(var i=0;i<gameChar.lives;i++){
         fill(255,0,0);
         circle(110+i*15,36,10);   
     }
