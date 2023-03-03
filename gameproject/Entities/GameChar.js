@@ -1,4 +1,6 @@
+
 function GameChar(x,y,lives,speed){
+    soundFormats("mp3");
     //Possible Char States
     this.STANDING=0;
     this.LEFT=1;
@@ -12,7 +14,9 @@ function GameChar(x,y,lives,speed){
     this.floorPos=y;
     this.speed=speed;
     this.state=[true,false,false,false];
-    
+    this.jumpSound=loadSound("../assets/jump.mp3");
+    this.deathSound=loadSound("../assets/deathSound.mp3");
+
     this.draw=function(){
         if(this.state[this.LEFT]) this.drawLeft();
         else if(this.state[this.RIGHT]) this.drawRight();
@@ -119,6 +123,7 @@ function GameChar(x,y,lives,speed){
                 this.state[this.LEFT]=true;
             }
             if (keyCode == 87 && !this.state[this.FALLING] && !this.state[this.PLUMMETING]){
+                this.jumpSound.play();
                 this.pos_y-=120;
                 this.state[this.FALLING]=true;
             }

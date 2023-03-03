@@ -26,11 +26,16 @@ var lives;
 var s;
 var trees;
 var gameChar;
+var loseSound;
+
+function preload(){
+    soundFormats("mp3");
+    loseSound=loadSound("./Assets/loseSound.mp3");
+}
 function setup()
 {
 	createCanvas(1024, 576);
 	floorPos_y = height * 3/4;
-    lives=3;
     startGame();
 }
 
@@ -182,9 +187,11 @@ function drawCanyons(){
 function checkPlayerDie(){
     if(gameChar.pos_y>=height && gameChar.lives>0){
         gameChar.lives--;
+        gameChar.deathSound.play();
         if(gameChar.lives>0){
             startGame();
         }
+        else loseSound.play();
     }
 }
 

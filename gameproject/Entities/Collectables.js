@@ -1,9 +1,10 @@
 function Collectable(x,y,size){
+    soundFormats("mp3");
     this.x_pos=x;
     this.y_pos=y;
     this.size=size;
     this.isFound=false;
-    
+    this.isFoundSound=loadSound("../assets/item.mp3");
     this.draw=function(){
         if (this.isFound==false){
             fill(255, 166, 10);
@@ -15,7 +16,8 @@ function Collectable(x,y,size){
 
     this.checkCollectable=function(gameChar_x,gameChar_y){
         if (dist(gameChar_x,gameChar_y,collectables[i].x_pos,collectables[i].y_pos)<50){
-            collectables[i].isFound=true;
+            if (!this.isFound) this.isFoundSound.play(); 
+            this.isFound=true;
             game_score++;
         }
     }

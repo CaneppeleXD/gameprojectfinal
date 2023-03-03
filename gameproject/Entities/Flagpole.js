@@ -1,6 +1,8 @@
 function Flagpole(x){
+    soundFormats("mp3");
     this.x_pos=x;
     this.isReached=false;
+    this.winSound=loadSound("../assets/win.mp3");
 
     this.draw=function(){
         strokeWeight(5);
@@ -30,8 +32,9 @@ function Flagpole(x){
     }
 
     this.checkFlagpoleIsReached=function(gameChar_x){
-        if(abs(gameChar_x-flagpole.x_pos)<10){
-            flagpole.isReached=true;
+        if(abs(gameChar_x-this.x_pos)<10){
+            if(!this.isReached) this.winSound.play();
+            this.isReached=true;
         }
     }
 }
