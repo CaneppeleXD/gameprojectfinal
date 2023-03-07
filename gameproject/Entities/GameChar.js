@@ -103,7 +103,7 @@ function GameChar(x,y,lives,speed){
         if(this.state[this.LEFT]) this.pos_x-=this.speed;
         else if(this.state[this.RIGHT]) this.pos_x+=this.speed;
         
-        if(this.pos_y<this.floorPos) {
+        if(this.pos_y<this.floorPos) { //talvez colocar uma condicao aqui para conferir se ta em cima da plataforma ou nao
             this.pos_y+=this.speed*0.8;
             this.state[this.FALLING]=true;
         }
