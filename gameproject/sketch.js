@@ -27,6 +27,7 @@ var s;
 var trees;
 var gameChar;
 var loseSound;
+var platforms;
 
 function preload(){
     soundFormats("mp3");
@@ -78,6 +79,9 @@ function draw()
     flagpole.draw();
     flagpole.checkFlagpoleIsReached(gameChar.pos_x);
 
+    //draw platform
+    drawPlatForms();
+
 	checkPlayerDie();
     
     //the game character
@@ -111,20 +115,22 @@ function startGame(){
     isFalling = false;
     isPlummeting = false;
 
-    collectables= createCollectables();
+    collectables = createCollectables();
     
-    canyons= createCanyons();
+    canyons = createCanyons();
     
     trees = createTrees();
 
-    clouds=createClouds();
+    clouds = createClouds();
 
-    mountains= createMountains();
+    mountains = createMountains();
+
+    platforms = createPlatforms();
 
     flagpole= new Flagpole(1500);
 
-    cameraPosX=0;
-    game_score=0;
+    cameraPosX = 0;
+    game_score = 0;
 }
 
 function keyPressed()
@@ -184,6 +190,12 @@ function drawCanyons(){
     }
 }
 
+function drawPlatForms(){
+    for(var i = 0;i < platforms.length; i++){
+        platforms[i].draw();
+    }  
+}
+
 function checkPlayerDie(){
     if(gameChar.pos_y>=height && gameChar.lives>0){
         gameChar.lives--;
@@ -220,5 +232,9 @@ function createClouds(){
 
 function createMountains(){
    return [new Mountain(210,floorPos_y,220),new Mountain(510,floorPos_y,220),new Mountain(810,floorPos_y,220)]; 
+}
+
+function createPlatforms(){
+    return [new Platform(80,floorPos_y-80,200)]
 }
 
