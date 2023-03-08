@@ -123,7 +123,7 @@ function GameChar(x,y,lives,speed){
                 this.state[this.LEFT]=true;
             }
             if (keyCode == 87 && !this.state[this.FALLING] && !this.state[this.PLUMMETING]){
-                this.jumpSound.play();
+                //this.jumpSound.play();
                 this.pos_y-=120;
                 this.state[this.FALLING]=true;
             }

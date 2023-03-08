@@ -43,9 +43,8 @@ function setup()
 
 function draw()
 {
-	///////////DRAWING CODE//////////
     cameraPosX=gameChar.pos_x - width/2;
-	background(100,155,255); //fill the sky blue
+	background(100,155,255);
     
     textSize(12);
     noStroke();
@@ -55,40 +54,31 @@ function draw()
     drawLifeTokens();
 	noStroke();
 	fill(0,155,0);
-	rect(0, floorPos_y, width, height - floorPos_y); //draw some green ground
+	rect(0, floorPos_y, width, height - floorPos_y);
     
     
     push();
     translate(-cameraPosX,0);
     
-    //cloud
     drawClouds();
     
-    //mountain
     drawMountains();
     
-    //tree
     drawTrees();
     
-	//collectable
     drawCollectables();
     
-    //draw the canyon
     drawCanyons();
     
-    //draw flagpole
     flagpole.draw();
     flagpole.checkFlagpoleIsReached(gameChar.pos_x);
 
-    //draw platform
     drawPlatForms();
 
-    //draw enemies
     drawEnemies();
 
 	checkPlayerDie();
     
-    //the game character
     gameChar.draw();
     
     pop();
@@ -152,9 +142,6 @@ function keyPressed()
 
 function keyReleased()
 {
-	// if statements to control the animation of the character when
-	// keys are released.
-
 	console.log("keyReleased: " + key);
 	console.log("keyReleased: " + keyCode);
     if(!flagpole.isReached) gameChar.keyReleased(keyCode);
@@ -204,12 +191,21 @@ function drawPlatForms(){
 
 function drawEnemies(){
     for(var i = 0;i < enemies.length; i++){
-        enemies[i].draw();
+        enemies[i].update();
+        if(enemies[i].checkPlayerOnTop(gameChar)) enemies[i].alive=false;
+        if(enemies[i].alive) enemies[i].draw();
     }  
 }
 
+function checkPlayerTouchEnemy(){
+    for(var i = 0;i < enemies.length; i++){
+        if(enemies[i].checkCharX(gameChar.pos_x) && !gameChar.state[gameChar.FALLING] && enemies[i].alive) return true;
+    }  
+    return false;
+}
+
 function checkPlayerDie(){
-    if(gameChar.pos_y>=height && gameChar.lives>0){
+    if(gameChar.lives>0 && (gameChar.pos_y>=height || checkPlayerTouchEnemy())){
         gameChar.lives--;
         gameChar.deathSound.play();
         if(gameChar.lives>0){
@@ -261,6 +257,6 @@ function createPlatforms(){
 }
 
 function createEnemies(){
-    return [new Enemy(800,floorPos_y,2,2,50)]
+    return [new Enemy(400,floorPos_y,4,2,50)]
 }
 
