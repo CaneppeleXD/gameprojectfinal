@@ -28,6 +28,7 @@ var trees;
 var gameChar;
 var loseSound;
 var platforms;
+var enemies;
 
 function preload(){
     soundFormats("mp3");
@@ -82,6 +83,9 @@ function draw()
     //draw platform
     drawPlatForms();
 
+    //draw enemies
+    drawEnemies();
+
 	checkPlayerDie();
     
     //the game character
@@ -126,6 +130,8 @@ function startGame(){
     mountains = createMountains();
 
     platforms = createPlatforms();
+
+    enemies = createEnemies();
 
     flagpole= new Flagpole(1500);
 
@@ -196,6 +202,12 @@ function drawPlatForms(){
     }  
 }
 
+function drawEnemies(){
+    for(var i = 0;i < enemies.length; i++){
+        enemies[i].draw();
+    }  
+}
+
 function checkPlayerDie(){
     if(gameChar.pos_y>=height && gameChar.lives>0){
         gameChar.lives--;
@@ -205,6 +217,16 @@ function checkPlayerDie(){
         }
         else loseSound.play();
     }
+    return false;
+}
+
+function checkPlatform(gameChar){
+    for(var i=0;i<platforms.length;i++){
+        if (platforms[i].checkPlayerOnTop(gameChar)){
+            return true;
+        }
+    }
+    return false;
 }
 
 function drawLifeTokens(){
@@ -236,5 +258,9 @@ function createMountains(){
 
 function createPlatforms(){
     return [new Platform(80,floorPos_y-80,200)]
+}
+
+function createEnemies(){
+    return [new Enemy(800,floorPos_y,2,2,50)]
 }
 

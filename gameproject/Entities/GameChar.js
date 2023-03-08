@@ -103,7 +103,7 @@ function GameChar(x,y,lives,speed){
         if(this.state[this.LEFT]) this.pos_x-=this.speed;
         else if(this.state[this.RIGHT]) this.pos_x+=this.speed;
         
-        if(this.pos_y<this.floorPos) { //talvez colocar uma condicao aqui para conferir se ta em cima da plataforma ou nao
+        if(this.pos_y<this.floorPos && !checkPlatform(this)) { //talvez colocar uma condicao aqui para conferir se ta em cima da plataforma ou nao
             this.pos_y+=this.speed*0.8;
             this.state[this.FALLING]=true;
         }
@@ -140,7 +140,7 @@ function GameChar(x,y,lives,speed){
     }
 
     this.canyonFall=function(){
-        if(!this.state[this.FALLING]){
+        if(!this.state[this.FALLING] && !checkPlatform(this)){
             this.state[this.PLUMMETING]=true;
             this.state[this.LEFT]=false;
             this.state[this.RIGHT]=false;
