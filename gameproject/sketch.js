@@ -5,25 +5,15 @@ The Game Project 4
 
 */
 
-var gameChar_x;
-var gameChar_y;
 var floorPos_y;
-var isLeft;
-var isRight;
-var isFalling;
-var isPlummeting;
 var collectables;
 var canyons;
-var trees_x;
-var treePos_y;
 var clouds
-var cloud;
 var mountains;
 var cameraPosX;
 var game_score;
 var flagpole;
 var lives;
-var s;
 var trees;
 var gameChar;
 var loseSound;
@@ -102,7 +92,7 @@ function draw()
 }
 
 function startGame(){
-    gameChar = new GameChar(width/2,floorPos_y,gameChar==null ? 3 : gameChar.lives, 5);
+    gameChar = new GameChar(width/2-50,floorPos_y,gameChar==null ? 3 : gameChar.lives, 5);
     
     gameChar_x = width/2;
 	gameChar_y = floorPos_y;
@@ -111,7 +101,7 @@ function startGame(){
     isFalling = false;
     isPlummeting = false;
     
-    if(gameChar.lives==0 || gameChar.lives==3){
+    if(gameChar.lives==0 || gameChar.lives==3 || flagpole.isReached){
         collectables = createCollectables();
         
         canyons = createCanyons();
@@ -125,13 +115,12 @@ function startGame(){
         platforms = createPlatforms();
 
         enemies = createEnemies();
-    }    
-    flagpole= new Flagpole(levelSize*0.80);
 
-    game_score = 0;
+        game_score = 0;
+    }    
+    flagpole= new Flagpole(levelSize*0.82);    
 
     cameraPosX = 0;
-    
 }
 
 function keyPressed()
@@ -207,7 +196,7 @@ function drawEnemies(){
 
 function checkPlayerTouchEnemy(){
     for(var i = 0;i < enemies.length; i++){
-        if(enemies[i].checkCharX(gameChar.pos_x) && !gameChar.state[gameChar.FALLING] && enemies[i].alive) return true;
+        if(enemies[i].checkCharX(gameChar.pos_x) && !gameChar.state[gameChar.FALLING] && enemies[i].alive && !checkPlatform(gameChar)) return true;
     }  
     return false;
 }
@@ -241,7 +230,7 @@ function drawLifeTokens(){
 }
 
 function createCollectables(){
-    return [new Collectable(90,410,100),new Collectable(700,410,100),new Collectable(1100,410,100)]
+    return [new Collectable(-40,410,100),new Collectable(150,350,100),new Collectable(700,410,100),new Collectable(1100,410,100), new Collectable(150,350,100),new Collectable(1050,200,120),new Collectable(1750,350,100),new Collectable(2050,350,100),new Collectable(2475,280,100),new Collectable(2675,280,100),new Collectable(3200,410,100),new Collectable(3550,350,100)]
 }
 
 function createCanyons(){
@@ -273,10 +262,10 @@ function createMountains(){
 }
 
 function createPlatforms(){
-    return [new Platform(2350,floorPos_y-60,100), new Platform(2350,floorPos_y-60,100), new Platform(2550,floorPos_y-60,80), new Platform(2750,floorPos_y-60,60)]
+    return [new Platform(60,floorPos_y-60,180), new Platform(1100,floorPos_y-80,80), new Platform(1100,floorPos_y-220,80), new Platform(1200,floorPos_y-140,80), new Platform(2350,floorPos_y-60,100), new Platform(2550,floorPos_y-60,80), new Platform(2750,floorPos_y-60,60)]
 }
 
 function createEnemies(){
-    return [new Enemy(400,floorPos_y,4,6,50)]
+    return [new Enemy(-250,floorPos_y,4,12,220),new Enemy(660,floorPos_y,4,20,260),new Enemy(1100,floorPos_y,4,20,200),new Enemy(1600,floorPos_y,4,20,200),new Enemy(1900,floorPos_y,4,24,-200),new Enemy(3100,floorPos_y,4,28,200),new Enemy(3500,floorPos_y,4,22,300)]
 }
 

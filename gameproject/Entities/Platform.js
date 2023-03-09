@@ -11,7 +11,7 @@ function Platform(x,y,width){
         return this.checkCharX(gameChar.pos_x) && this.checkCharY(gameChar.pos_y);
     }
     this.checkCharX=function(x){
-        return x>this.pos_x && x<this.pos_x+width;
+        return x>this.pos_x-5 && x<this.pos_x+width+5;
     }
     this.checkCharY=function(y){
         return y>this.pos_y-8 && y<this.pos_y;

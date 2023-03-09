@@ -33,7 +33,7 @@ function Enemy(x,y,size,speed,range){
     }
 
     this.update=function(){
-        if (this.startX+this.range<this.pos_x || this.pos_x<this.startX) this.speed*=(-1);
+        if ((this.range>0 ? this.startX+this.range<this.pos_x : this.startX+this.range>this.pos_x) || (this.range>0 ? this.pos_x<this.startX : this.pos_x>this.startX)) this.speed*=(-1);
         this.pos_x+=this.speed;
     }
     
@@ -44,6 +44,6 @@ function Enemy(x,y,size,speed,range){
         return x>this.pos_x-this.width/2 && x<this.pos_x+this.width+2;
     }
     this.checkCharY=function(y){
-        return y>this.pos_y-this.height-8 && y<this.pos_y-this.height;
+        return y>this.pos_y-this.height-6 && y<this.pos_y-this.height+this.height/2;
     }
 }
