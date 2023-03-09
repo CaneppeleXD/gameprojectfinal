@@ -13,7 +13,6 @@ function Enemy(x,y,size,speed,range){
     this.draw=function(){
         fill(255,255,255,100);
         noStroke();
-        //rect(this.pos_x,this.pos_y-this.height,this.width,this.height);
         arc(this.pos_x,this.pos_y-this.height/2,this.width,this.height,PI,2*PI, PIE);
         beginShape();
         vertex(this.pos_x-this.width/2,this.pos_y-this.height/2);
