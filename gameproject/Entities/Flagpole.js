@@ -2,7 +2,7 @@ function Flagpole(x){
     soundFormats("mp3");
     this.x_pos=x;
     this.isReached=false;
-    this.winSound=loadSound("../assets/win.mp3");
+    this.winSound=loadSound("./assets/win.mp3");
 
     this.draw=function(){
         strokeWeight(5);

@@ -29,6 +29,7 @@ var gameChar;
 var loseSound;
 var platforms;
 var enemies;
+var levelSize;
 
 function preload(){
     soundFormats("mp3");
@@ -38,6 +39,7 @@ function setup()
 {
 	createCanvas(1024, 576);
 	floorPos_y = height * 3/4;
+    levelSize = 4800;
     startGame();
 }
 
@@ -108,25 +110,28 @@ function startGame(){
     isRight = false;
     isFalling = false;
     isPlummeting = false;
-
-    collectables = createCollectables();
     
-    canyons = createCanyons();
-    
-    trees = createTrees();
+    if(gameChar.lives==0 || gameChar.lives==3){
+        collectables = createCollectables();
+        
+        canyons = createCanyons();
+        
+        trees = createTrees();
 
-    clouds = createClouds();
+        clouds = createClouds();
 
-    mountains = createMountains();
+        mountains = createMountains();
 
-    platforms = createPlatforms();
+        platforms = createPlatforms();
 
-    enemies = createEnemies();
+        enemies = createEnemies();
+    }    
+    flagpole= new Flagpole(levelSize*0.80);
 
-    flagpole= new Flagpole(1500);
+    game_score = 0;
 
     cameraPosX = 0;
-    game_score = 0;
+    
 }
 
 function keyPressed()
@@ -192,7 +197,10 @@ function drawPlatForms(){
 function drawEnemies(){
     for(var i = 0;i < enemies.length; i++){
         enemies[i].update();
-        if(enemies[i].checkPlayerOnTop(gameChar)) enemies[i].alive=false;
+        if(enemies[i].checkPlayerOnTop(gameChar)){
+            if(enemies[i].alive) enemies[i].dieSound.play(); 
+            enemies[i].alive=false;
+        }
         if(enemies[i].alive) enemies[i].draw();
     }  
 }
@@ -237,26 +245,38 @@ function createCollectables(){
 }
 
 function createCanyons(){
-    return [new Canyon(100,100),new Canyon(560,100),new Canyon(960,100)];
+    return [new Canyon(0,300),new Canyon(560,100),new Canyon(960,100),new Canyon(1300,100),new Canyon(1500,100),new Canyon(1900,100),new Canyon(2100,100),new Canyon(2300,600),new Canyon(3000,100),new Canyon(3300,100),new Canyon(3500,100)];
 }
 
 function createTrees(){
-    return [new Tree(30,floorPos_y-200),new Tree(500,floorPos_y-200),new Tree(900,floorPos_y-200),new Tree(1300,floorPos_y-200)]
+    var trees= [];
+    for(var i = 0;i<levelSize/500; i++ ){
+        trees.push(new Tree(30+500*i,floorPos_y-200));
+    }
+    return trees;
 }
 
 function createClouds(){
-    return [new Cloud(200,120,120),new Cloud(600,80,150),new Cloud(1000,150,100)];
+    var clouds = [];
+    for(var i = 0;i<levelSize/400; i++ ){
+        clouds.push(new Cloud(200+400*i,random(80,150),random(100,150)));
+    }
+    return clouds;
 }
 
 function createMountains(){
-   return [new Mountain(210,floorPos_y,220),new Mountain(510,floorPos_y,220),new Mountain(810,floorPos_y,220)]; 
+    var mountains= [];
+    for(var i = 0;i<levelSize/300; i++ ){
+        mountains.push(new Mountain(210+300*i,floorPos_y,random(150,300)));
+    }
+    return mountains;
 }
 
 function createPlatforms(){
-    return [new Platform(80,floorPos_y-80,200)]
+    return [new Platform(2350,floorPos_y-60,100), new Platform(2350,floorPos_y-60,100), new Platform(2550,floorPos_y-60,80), new Platform(2750,floorPos_y-60,60)]
 }
 
 function createEnemies(){
-    return [new Enemy(400,floorPos_y,4,2,50)]
+    return [new Enemy(400,floorPos_y,4,6,50)]
 }
 

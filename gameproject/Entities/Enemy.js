@@ -9,6 +9,7 @@ function Enemy(x,y,size,speed,range){
     this.range=range;
     this.size=size;
     this.alive=true;
+    this.dieSound=loadSound("./assets/ghostDie.mp3");
     this.draw=function(){
         fill(255,255,255,100);
         noStroke();
@@ -26,10 +27,13 @@ function Enemy(x,y,size,speed,range){
         vertex(this.pos_x-this.width/2+(this.width/8*8),this.pos_y-this.height/2);
         vertex(this.pos_x-this.width/2,this.pos_y-this.height/2);
         endShape();
+        fill(0);
+        ellipse(this.pos_x-this.width/5,this.pos_y-this.height/1.4,5,5);
+        ellipse(this.pos_x+this.width/5,this.pos_y-this.height/1.4,5,5);
     }
 
     this.update=function(){
-        if (this.startX+this.range<this.pos_x || this.pos_x<this.startX) this.speed*(-1);
+        if (this.startX+this.range<this.pos_x || this.pos_x<this.startX) this.speed*=(-1);
         this.pos_x+=this.speed;
     }
     
