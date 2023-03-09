@@ -4,7 +4,7 @@ function Collectable(x,y,size){
     this.y_pos=y;
     this.size=size;
     this.isFound=false;
-    this.isFoundSound=loadSound("./assets/item.mp3");
+    this.isFoundSound=loadSound("./Assets/item.mp3");
     this.draw=function(){
         if (this.isFound==false){
             fill(255, 166, 10);

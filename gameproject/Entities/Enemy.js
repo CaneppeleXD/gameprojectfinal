@@ -9,7 +9,7 @@ function Enemy(x,y,size,speed,range){
     this.range=range;
     this.size=size;
     this.alive=true;
-    this.dieSound=loadSound("./assets/ghostDie.mp3");
+    this.dieSound=loadSound("./Assets/ghostDie.mp3");
     this.draw=function(){
         fill(255,255,255,100);
         noStroke();

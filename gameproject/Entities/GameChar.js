@@ -14,8 +14,8 @@ function GameChar(x,y,lives,speed){
     this.floorPos=y;
     this.speed=speed;
     this.state=[true,false,false,false];
-    this.jumpSound=loadSound("./assets/jump.mp3");
-    this.deathSound=loadSound("./assets/deathSound.mp3");
+    this.jumpSound=loadSound("./Assets/jump.mp3");
+    this.deathSound=loadSound("./Assets/deathSound.mp3");
 
     this.draw=function(){
         if(this.state[this.LEFT]) this.drawLeft();
